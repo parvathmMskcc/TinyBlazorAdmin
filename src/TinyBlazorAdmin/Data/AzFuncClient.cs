@@ -27,7 +27,7 @@ namespace TinyBlazorAdmin.Data
             return result;
         }
 
-        public async Task<ShortUrlList> CreateShortUrl(ShortUrlRequest shortUrlRequest)
+        public async Task<ShortUrlEntity> CreateShortUrl(ShortUrlRequest shortUrlRequest)
         {
             var result = await _urlSecuredService.CreateShortUrl(shortUrlRequest);
             return result;
