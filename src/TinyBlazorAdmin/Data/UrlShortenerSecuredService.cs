@@ -50,14 +50,14 @@ namespace TinyBlazorAdmin.Data
             return resultList;
         }
 
-        public async Task<ShortUrlList> CreateShortUrl(ShortUrlRequest shortUrlRequest)
+        public async Task<ShortUrlEntity> CreateShortUrl(ShortUrlRequest shortUrlRequest)
         {
             CancellationToken cancellationToken = new CancellationToken();
 
             var response = await _client.PostAsJsonAsync($"/api/UrlShortener", shortUrlRequest, cancellationToken);
 
             var resultList = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<ShortUrlList>(resultList);
+            return JsonConvert.DeserializeObject<ShortUrlEntity>(resultList);
         }
 
         public async Task<ShortUrlEntity> UpdateShortUrl(ShortUrlEntity editedUrl)
