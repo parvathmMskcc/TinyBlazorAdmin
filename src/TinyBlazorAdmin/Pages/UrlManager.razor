@@ -172,21 +172,58 @@ else
 
 
 
-} 
+}
+@if (ShowReturnDataPopup)
+{
+    <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirm action</h4>
+                    <button type="button" class="close" @onclick="@ClosePopup">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body" Model="returnUrl">
+                    <div>
+                        <label for="return-title">Title : </label>
+                        <label for="return-title">@returnUrl.Title</label>
+
+                    </div>
+                
+                    <div>
+                        <label for="return-shorturl">Short URL : </label>
+                        <label for="return-shorturl">@returnUrl.ShortUrl</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+}
+
 
 @code
 {
     bool ShowCreatePopup = false;
     bool ShowEditPopup = false;
+    bool ShowReturnDataPopup = false;
     ShortUrlRequest shortUrlRequest = new ShortUrlRequest();
     ShortUrlEntity editedUrl;
     ShortUrlList UrlList;
+    ShortUrlEntity returnUrl;
     public List<ShortUrlEntity> gridData { get; set; }
 
     void ClosePopup()
     {
         ShowCreatePopup = false;
         ShowEditPopup = false;
+        ShowReturnDataPopup = false;
     }
 
     private async Task UpdateUIList() {
@@ -198,14 +235,20 @@ else
     private async Task SaveShortUrl()
     {
         ShowCreatePopup = false;
-        await azClient.CreateShortUrl(shortUrlRequest);
+        var data = await azClient.CreateShortUrl(shortUrlRequest);
+        ReturnShortUrl(data);
         await UpdateUIList();
     }
-
+     void ReturnShortUrl(ShortUrlEntity urlEntity)
+    {
+        returnUrl = urlEntity;
+        ShowReturnDataPopup = true;
+    }
     private async Task SaveUpdatedShortUrl()
     {
         ShowEditPopup = false;
-        await azClient.UpdateShortUrl(editedUrl);
+        var data = await azClient.UpdateShortUrl(editedUrl);
+        ReturnShortUrl(data);
         await UpdateUIList();
     }
 
